@@ -1,0 +1,16 @@
+Write a web scraping script that collects data from https://rv.campingworld.com/ with the following specification:
+
+Collect Nationwide listings of "Motorhomes for Sale" (https://rv.campingworld.com/rvclass/motorhome-rvs) that are running on Diesel
+Capture product details (new vs old, stock #, sleeps #, length), pricing information, dealership location
+For vehicles with the sale price above $300,000 collect the horsepower
+Please make sure that you capture only the requested subset of RVs and that the final results are complete.
+
+A few things to keep in mind:
+
+All code should be written in Python, properly structured, commented and formatted – correctness matter as much as good style and readability
+Speed is somewhat important so 1) think carefully about packages you use 2) try to minimize hits to the website 3) remember not to harm the website or do anything that would result in throttling
+Data collection should be *complete* - check that all data fitting the above criteria on the website has been collected and that there are no duplicates (we expect there to be around 1000 unique results)
+It should be straightforward to change the script and collect data for a different fuel type
+As the goal of this project is to evaluate your coding skills, we would prefer if you keep it light-weight and advise against heavily employing scraping frameworks in scraping the site
+A section in the README documenting your through process while approaching this problem is appreciated
+Please put your code on GitHub and submit the link.
