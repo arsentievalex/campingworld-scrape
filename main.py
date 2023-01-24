@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import StaleElementReferenceException
 import pandas as pd
 import time
 
@@ -22,7 +23,7 @@ def open_browser(browser, fuel_type):
     browser.get(website)
 
     # let the page load
-    time.sleep(2)
+    time.sleep(3)
 
 
 def get_pages(browser):
@@ -43,18 +44,37 @@ def get_pages(browser):
     return num_of_pages
 
 
+def find_by_xpath(browser, xpath):
+    """Function that finds elements by xpath.
+    Args:
+        browser (Selenium webdriver object)
+        xpath (str): xpath string
+    Returns:
+        The list of web elements
+        """
+    # try to find elements by xpath, if the page did not load yet then wait 10 seconds, and try again
+    try:
+        elements = browser.find_elements(by=By.XPATH, value=xpath)
+        return elements
+    except (NoSuchElementException, StaleElementReferenceException):
+        time.sleep(10)
+        elements = browser.find_elements(by=By.XPATH, value=xpath)
+        return elements
+
+
 def scrape_webpage(browser):
     """Function to scrape elements from the webpage and append results to empty lists declared outside of function.
     Args:
         browser (Selenium webdriver object)
     """
 
+    time.sleep(3)
     # search for needed data using xpath locators
-    prices = browser.find_elements(by=By.XPATH, value="//span[@class='price-info low-price ']")
-    stocks_loc = browser.find_elements(by=By.XPATH, value="//span[@class='stock-results']")
-    statuses = browser.find_elements(by=By.XPATH, value="//span[@class='status']")
-    specs = browser.find_elements(by=By.XPATH, value="//div[@class='specs']")
-    urls = browser.find_elements(by=By.XPATH, value="//a[@class='productTitle']")
+    prices = find_by_xpath(browser=browser, xpath="//span[@class='price-info low-price ']")
+    stocks_loc = find_by_xpath(browser=browser, xpath="//span[@class='stock-results']")
+    statuses = find_by_xpath(browser=browser, xpath="//span[@class='status']")
+    specs = find_by_xpath(browser=browser, xpath="//div[@class='specs']")
+    urls = find_by_xpath(browser=browser, xpath="//a[@class='productTitle']")
 
     # bring in global variables inside a function
     global price_raw
@@ -99,7 +119,8 @@ def get_horsepower(browser, url):
     # open a browser and load webpage
     browser.get(url)
     # search for listing details
-    horsepower = browser.find_elements(by=By.XPATH, value="//div[@class='oneSpec clearfix']")
+    time.sleep(3)
+    horsepower = find_by_xpath(browser=browser, xpath="//div[@class='oneSpec clearfix']")
 
     # initiate empty list to hold the scraped data
     holder = []
@@ -191,7 +212,8 @@ print('scraping data...')
 
 # run the scrape webpage function on each page
 page = 1
-while page < num_of_pages:
+while page <= num_of_pages:
+    print("scraping page nr {} out of {}...".format(page, num_of_pages))
     scrape_webpage(browser=driver)
     page += 1
 
