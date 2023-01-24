@@ -7,10 +7,10 @@ On the high-level the process is as follows:
 - The data from each listing is scraped and put into separate lists
 - Once the main scraping is done on all pages, the lists with data are cleaned off unnecessary characters
 - The lists with clean data are transformed into a Pandas dataframe
-- If there are listings with price above $300,000, the script scrapes horsepower from each listing's details page and saves it into a dictionary with index as keys and horsepower as values. Next, the dictionary is transformed into a Pandas dataframe and joined with the main dataframe on index.
+- If there are listings with the price above $300,000, the script scrapes horsepower from each listing's details page and saves it into a dictionary with index as keys and horsepower as values. If no horsepower is provided, the script returns "no data". Next, the dictionary is transformed into a Pandas dataframe and joined with the main dataframe on index.
 - The resulting dataframe is saved as a csv file
 
-Running time of the script for diesel vehicles is around 14 minutes (50+ pages scraped).
+Running time of the script for diesel vehicles is around 15 minutes (50+ pages scraped).
 
 Note: chromedriver.exe compatible to your browser is required to be in the working directory.
 You can download it here:
